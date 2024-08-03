@@ -26,4 +26,14 @@ export class TariffType extends ValueObject<TariffTypeProps> {
   isValid(): boolean {
     return TariffType.validTariffs.includes(this.props.value);
   }
+
+  isEqual(valueObject?: ValueObject<TariffTypeProps>): boolean {
+    if (valueObject === null || valueObject === undefined) {
+      return false;
+    }
+    if (!(valueObject instanceof TariffType)) {
+      return false;
+    }
+    return this.props.value === valueObject.props.value;
+  }
 }

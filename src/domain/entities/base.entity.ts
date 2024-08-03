@@ -1,5 +1,1 @@
-export class BaseEntity {
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt?: Date;
-}
+export class BaseEntity {}

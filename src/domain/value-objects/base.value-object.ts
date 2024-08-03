@@ -10,4 +10,5 @@ export abstract class ValueObject<T extends ValueObjectProps> {
   }
 
   abstract isValid(): boolean;
+  abstract isEqual(vo?: ValueObject<T>): boolean;
 }
