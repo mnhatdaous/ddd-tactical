@@ -1,12 +1,7 @@
-import { TariffObjectRepository } from '@/domain/repositories/tariff-object.repository';
+import { TariffObjectEntity } from '@/domain/entities/tariff-object.entity';
 
 export class TariffObjectService {
-  constructor(
-    private tariffObjectRepository: TariffObjectRepository,
-  ) { }
-
-  async deleteTariffObject(id: number): Promise<boolean> {
-
-    return true
+  async deleteTariffObject(tariffObjectEntity: TariffObjectEntity): Promise<boolean> {
+    return true;
   }
 }

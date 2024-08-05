@@ -11,6 +11,7 @@ export class TariffObjectEntity extends BaseEntity {
   tariffType: TariffType;
 
   constructor({
+    id,
     name,
     abbreviation,
     dataSource,
@@ -18,6 +19,7 @@ export class TariffObjectEntity extends BaseEntity {
     objectValueLocation,
     tariffType
   }: {
+    id?: number;
     name: string;
     abbreviation: string;
     dataSource: string;
@@ -26,7 +28,7 @@ export class TariffObjectEntity extends BaseEntity {
     tariffType: string;
   }) {
     super();
-    this.id = 0;
+    this.id = id ?? 0;
     this.name = name;
     this.abbreviation = abbreviation;
     this.dataSource = dataSource;

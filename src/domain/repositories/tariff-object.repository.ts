@@ -1,6 +1,7 @@
-import { TariffObjectAggregate } from '@/domain/aggregates/tariff-object.aggregate';
+import { TariffObjectEntity } from '@/domain/entities/tariff-object.entity';
 
 export abstract class TariffObjectRepository {
-  abstract save(tariffObjectAggregate: TariffObjectAggregate): Promise<TariffObjectAggregate>;
-  abstract delete(tariffObjectId: number): Promise<boolean>;
+  abstract find(id: number): Promise<TariffObjectEntity>;
+  abstract save(tariffObjectEntity: TariffObjectEntity): Promise<TariffObjectEntity>;
+  abstract delete(id: number): Promise<boolean>;
 }
