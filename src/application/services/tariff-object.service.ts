@@ -1,20 +1,29 @@
 import { TariffObjectRepository } from '@/domain/repositories/tariff-object.repository';
+import { AgreementRepository } from '@/domain/repositories/agreement.repository';
+import { AgreementAggregate } from '@/domain/aggregates/agreement.aggregate';
 import { TariffObjectEntity } from '@/domain/entities/tariff-object.entity';
-import { TariffObjectService as TariffObjectDomainService } from '@/domain/services/tariff-object.service';
-import { CreateTariffObjectRequest, CreateTariffObjectResponse } from '@/application/dtos/create-tariff-object.dto';
-import { DeleteTariffObjectRequest, DeleteTariffObjectResponse } from '@/application/dtos/delete-tariff-object.dto';
-
+import {
+  CreateTariffObjectRequest,
+  CreateTariffObjectResponse,
+} from '@/application/dtos/create-tariff-object.dto';
+import {
+  DeleteTariffObjectRequest,
+  DeleteTariffObjectResponse,
+} from '@/application/dtos/delete-tariff-object.dto';
 
 export class TariffObjectService {
   constructor(
     private tariffObjectRepository: TariffObjectRepository,
-    private tariffObjectDomainService: TariffObjectDomainService,
-  ) { }
+    private agreementRepository: AgreementRepository,
+  ) {}
 
-  async createTariffObject(request: CreateTariffObjectRequest): Promise<CreateTariffObjectResponse> {
+  async createTariffObject(
+    request: CreateTariffObjectRequest,
+  ): Promise<CreateTariffObjectResponse> {
     const tariffObjectEntity = new TariffObjectEntity(request);
 
-    const newTariffObjectEntity = await this.tariffObjectRepository.save(tariffObjectEntity);
+    const newTariffObjectEntity =
+      await this.tariffObjectRepository.save(tariffObjectEntity);
 
     const createTariffObjectResponse = new CreateTariffObjectResponse({
       ...newTariffObjectEntity,
@@ -24,19 +33,24 @@ export class TariffObjectService {
     return createTariffObjectResponse;
   }
 
-  async deleteTariffObject(request: DeleteTariffObjectRequest): Promise<DeleteTariffObjectResponse> {
-    const tariffObjectEntity = await this.tariffObjectRepository.find(request.id);
-    const isInUse = tariffObjectAggregate.isInUse();
+  async deleteTariffObject({
+    id,
+  }: DeleteTariffObjectRequest): Promise<DeleteTariffObjectResponse> {
+    const formulaEntity =
+      await this.agreementRepository.findFormulaByTariffObjectId(id);
 
-    if (isInUse) {
+    const agreementAggregate = new AgreementAggregate(formulaEntity);
+
+    const tariffObjectEntity = await this.tariffObjectRepository.find(id);
+
+    if (agreementAggregate.isFormulaUsingTariffObject(tariffObjectEntity)) {
       throw new Error('Tariff is in use and cannot be deleted.');
     }
 
-    const success = await this.tariffObjectDomainService.deleteTariffObject(tariffObjectEntity);
-    if(success) {
-      await this.tariffObjectRepository.delete(tariffObjectEntity.id);
-    }
-    
-    return { success: success };
+    const success = await this.tariffObjectRepository.delete(
+      tariffObjectEntity.id,
+    );
+
+    return { success };
   }
 }

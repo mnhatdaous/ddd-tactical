@@ -17,7 +17,7 @@ export class TariffObjectEntity extends BaseEntity {
     dataSource,
     description,
     objectValueLocation,
-    tariffType
+    tariffType,
   }: {
     id?: number;
     name: string;
@@ -28,7 +28,7 @@ export class TariffObjectEntity extends BaseEntity {
     tariffType: string;
   }) {
     super();
-    this.id = id ?? 0;
+    this.id = id ?? 0; // question: why is this 0?
     this.name = name;
     this.abbreviation = abbreviation;
     this.dataSource = dataSource;

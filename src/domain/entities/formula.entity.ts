@@ -9,7 +9,7 @@ export class FormulaEntity extends BaseEntity {
   constructor({
     id,
     name,
-    tariffObjects
+    tariffObjects,
   }: {
     id?: number;
     name: string;
